@@ -1,22 +1,41 @@
 // Set up canvas
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
 
-// Create particles
-const particles = [];
-const particleCount = 500;
+// Function to set canvas size and particles count based on screen size
+function setCanvasSizeAndParticles() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-for (let i = 0; i < particleCount; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 4 + 1,
-        vx: Math.random() * 0.5 - 0.25,
-        vy: Math.random() * 0.5 - 0.25
-    });
+    // Calculate particle count based on screen size
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    let particleCount = screenWidth * screenHeight / 2000; // Adjust this factor as needed
+
+    // Ensure particle count is within reasonable limits
+    particleCount = Math.min(Math.max(particleCount, 100), 1000); // Adjust the range as needed
+
+    // Clear existing particles and create new particles
+    particles.length = 0;
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 4 + 1,
+            vx: Math.random() * 0.5 - 0.25,
+            vy: Math.random() * 0.5 - 0.25
+        });
+    }
 }
+
+// Initialize particles array
+const particles = [];
+
+// Initialize canvas size and particles on page load
+setCanvasSizeAndParticles();
+
+// Redraw particles when the window is resized
+window.addEventListener('resize', setCanvasSizeAndParticles);
 
 // Draw particles and connect them with lines
 function drawParticles() {
